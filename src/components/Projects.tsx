@@ -1,110 +1,94 @@
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { useInView } from "react-intersection-observer";
-import { projects } from "../data";
+import { useRef, useState } from "react";
+import { projects, type Project } from "../data";
+import Section from "./Section";
+import ProjectModal, { ProjectLinks, ProjectMetrics } from "./ProjectModal";
 
-const accents = ["#00d4ff", "#a855f7", "#00ff88"];
+function ProjectVisual({ project }: { project: Project }) {
+  const type = project.id;
+  return (
+    <div className={"project-visual " + type} aria-hidden="true">
+      <svg viewBox="0 0 300 134" fill="none">
+        {type === "saarthi-one-v2" && (
+          <g>
+            <circle cx="150" cy="67" r="47" stroke="currentColor" strokeOpacity=".55" />
+            <circle cx="150" cy="67" r="33" stroke="currentColor" strokeDasharray="2 4" />
+            <ellipse cx="150" cy="67" rx="105" ry="22" transform="rotate(-15 150 67)" stroke="currentColor" opacity=".6" />
+            <ellipse cx="150" cy="67" rx="92" ry="28" transform="rotate(18 150 67)" stroke="currentColor" opacity=".37" />
+            <path d="M150 45 156 61 172 67 156 73 150 89 144 73 128 67 144 61Z" fill="currentColor" />
+            <circle cx="98" cy="86" r="4" fill="currentColor" /><circle cx="226" cy="41" r="3" fill="currentColor" />
+          </g>
+        )}
+        {type === "saarthi-opsmind" && (
+          <g>
+            <path d="M65 69H118Q132 69 132 53V38h48m-48 12v40q0 12 15 12h34m-29-33h83" stroke="currentColor" strokeWidth="1.5" strokeDasharray="4 3" />
+            <g stroke="currentColor" strokeWidth="1.3" fill="#151522">
+              <rect x="45" y="57" width="29" height="24" rx="6" /><rect x="119" y="56" width="31" height="27" rx="7" />
+              <rect x="178" y="27" width="36" height="23" rx="6" /><rect x="178" y="91" width="36" height="23" rx="6" />
+              <rect x="225" y="57" width="30" height="24" rx="6" />
+            </g>
+            <g fill="currentColor"><circle cx="59" cy="69" r="3" /><circle cx="135" cy="69" r="4" /><circle cx="195" cy="38" r="3" /><circle cx="249" cy="69" r="2" /><circle cx="195" cy="102" r="3" /></g>
+          </g>
+        )}
+        {type === "customer-churn-prediction" && (
+          <g>
+            <path d="M63 27v79h180M63 50h180M63 78h180" stroke="currentColor" opacity=".32" />
+            <path d="M81 100H99V81H81ZM111 100H129V72H111ZM141 100H159V63H141ZM171 100H189V43H171ZM201 100H219V33H201Z" fill="currentColor" opacity=".2" />
+            <path d="m81 89 38-16 34 1 26-20 39-16 21-12" stroke="currentColor" strokeWidth="2" />
+            <circle cx="239" cy="26" r="4" fill="currentColor" />
+          </g>
+        )}
+      </svg>
+    </div>
+  );
+}
 
 export default function Projects() {
-  const { ref, inView } = useInView({ threshold: 0.1, triggerOnce: true });
-  const [activeProject, setActiveProject] = useState<string | null>(null);
+  const [selected, setSelected] = useState<Project | null>(null);
+  const trigger = useRef<HTMLButtonElement | null>(null);
 
   return (
-    <section id="projects" className="py-24 relative" ref={ref}>
-      <div className="max-w-7xl mx-auto px-6">
-        <motion.h2
-          initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7 }}
-          className="text-4xl md:text-5xl font-black text-white section-heading mb-16"
-        >
-          Selected Projects
-        </motion.h2>
-
-        <div className="flex flex-col gap-8">
-          {projects.map((project, index) => {
-            const color = accents[index % accents.length];
-            const isExpanded = activeProject === project.id;
-            const detailsId = `${project.id}-details`;
-
-            return (
-              <motion.article
-                key={project.id}
-                initial={{ opacity: 0, y: 35 }}
-                animate={inView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.6, delay: index * 0.12 }}
-                className="glass-card rounded-2xl overflow-hidden"
-                style={{
-                  borderColor: `${color}33`,
-                  background: `linear-gradient(135deg, ${color}0e, rgba(5,5,16,0.35))`,
-                }}
-              >
-                <div className="p-6 md:p-8">
-                  <h3 className="text-white font-bold text-xl leading-tight">{project.title}</h3>
-                  <p className="text-[#94a3b8] mt-2">{project.description}</p>
-
-                  {project.metrics && (
-                    <dl className="flex flex-wrap gap-3 mt-5">
-                      {project.metrics.map(({ label, value }) => (
-                        <div key={label} className="rounded-lg bg-white/5 border border-white/10 px-4 py-3">
-                          <dt className="text-[#94a3b8] text-sm">{label}</dt>
-                          <dd className="font-black text-lg font-mono" style={{ color }}>{value}</dd>
-                        </div>
-                      ))}
-                    </dl>
-                  )}
-
-                  <ul aria-label="Technologies" className="flex flex-wrap gap-2 mt-5">
-                    {project.technologies.map((technology) => (
-                      <li
-                        key={technology}
-                        className="tech-tag"
-                        style={{ background: `${color}10`, borderColor: `${color}30`, color }}
-                      >
-                        {technology}
-                      </li>
-                    ))}
-                  </ul>
-
-                  <div className="flex flex-wrap items-center gap-x-5 gap-y-2 mt-5">
-                    {project.links.map(({ label, href }) => (
-                      <a
-                        key={href}
-                        href={href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-sm underline underline-offset-4"
-                        style={{ color }}
-                      >
-                        {label}
-                      </a>
-                    ))}
-                    <button
-                      type="button"
-                      aria-expanded={isExpanded}
-                      aria-controls={detailsId}
-                      onClick={() => setActiveProject(isExpanded ? null : project.id)}
-                      className="rounded-md px-3 py-2 text-sm text-white border border-white/20 cursor-pointer focus-visible:outline-2"
-                    >
-                      {isExpanded ? "Hide Details" : "View Details"}
-                    </button>
-                  </div>
-
-                  {project.deploymentNote && (
-                    <p className="mt-3 text-sm text-[#94a3b8]">{project.deploymentNote}</p>
-                  )}
-                </div>
-
-                <div id={detailsId} hidden={!isExpanded} className="border-t border-white/10 px-6 md:px-8 py-5">
-                  <ul className="list-disc pl-5 space-y-2 text-[#94a3b8] leading-relaxed">
-                    {project.highlights.map((highlight) => <li key={highlight}>{highlight}</li>)}
-                  </ul>
-                </div>
-              </motion.article>
-            );
-          })}
-        </div>
+    <Section id="projects" title="Selected Projects">
+      <div className="projects-grid">
+        {projects.map((project) => (
+          <article key={project.id} className="project-card panel" data-dust="panel" data-dust-step="6">
+            <ProjectVisual project={project} />
+            <div className="project-content">
+              <p className="project-type">{project.description}</p>
+              <h3>{project.title}</h3>
+              <p>{project.problem}</p>
+              <ProjectMetrics project={project} />
+              <ul className="tags" aria-label="Technologies">
+                {project.technologies.slice(0, 4).map((technology) => <li key={technology}>{technology}</li>)}
+              </ul>
+              <div className="project-actions">
+                <button
+                  type="button"
+                  className="btn btn-outline"
+                  aria-haspopup="dialog"
+                  aria-label={"View details for " + project.title}
+                  onClick={(event) => {
+                    trigger.current = event.currentTarget;
+                    setSelected(project);
+                  }}
+                >
+                  View Details
+                </button>
+                <ProjectLinks project={project} />
+                {project.deploymentNote && <p className="deployment-note">{project.deploymentNote}</p>}
+              </div>
+            </div>
+          </article>
+        ))}
       </div>
-    </section>
+      {selected && (
+        <ProjectModal
+          project={selected}
+          onDismiss={() => {
+            setSelected(null);
+            trigger.current?.focus({ preventScroll: true });
+          }}
+        />
+      )}
+    </Section>
   );
 }
