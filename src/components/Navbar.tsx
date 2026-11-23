@@ -1,127 +1,55 @@
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useRef, useState } from "react";
+import { motion, useScroll } from "framer-motion";
+import { LuMenu, LuX } from "react-icons/lu";
+import Brand from "./Brand";
+import { personal } from "../data";
 
-const navLinks = [
-  { label: "About", href: "#about" },
-  { label: "Skills", href: "#skills" },
-  { label: "Experience", href: "#experience" },
-  { label: "Projects", href: "#projects" },
-  { label: "Education", href: "#education" },
-  { label: "Contact", href: "#contact" },
+const links = [
+  ["About", "#about"], ["Skills", "#skills"], ["Projects", "#projects"],
+  ["Experience", "#experience"], ["Education", "#education"], ["Contact", "#contact"],
 ];
 
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  const handleNav = (href: string) => {
-    setMenuOpen(false);
-    const el = document.querySelector(href);
-    if (el) el.scrollIntoView({ behavior: "smooth" });
-  };
+  const [expanded, setExpanded] = useState(false);
+  const toggle = useRef<HTMLButtonElement>(null);
+  const { scrollYProgress } = useScroll();
 
   return (
-    <motion.nav
-      initial={{ y: -100, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.8, ease: "easeOut" }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? "bg-[rgba(5,5,20,0.95)] backdrop-blur-xl border-b border-[rgba(0,212,255,0.15)] shadow-[0_4px_30px_rgba(0,0,0,0.5)]"
-          : "bg-transparent"
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-        {/* Logo */}
-        <motion.div
-          whileHover={{ scale: 1.05 }}
-          className="flex items-center gap-2 cursor-pointer"
-          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-        >
-          <div className="w-9 h-9 rounded-lg flex items-center justify-center text-sm font-bold text-[#050510]"
-            style={{ background: "linear-gradient(135deg, #00d4ff, #a855f7)" }}>
-            AS
-          </div>
-          <span className="font-bold text-white" style={{ fontFamily: "'Fira Code', monospace" }}>
-            ajay<span style={{ color: "#00d4ff" }}>.ai</span>
-          </span>
-        </motion.div>
-
-        {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-8">
-          {navLinks.map((link) => (
-            <button
-              key={link.href}
-              onClick={() => handleNav(link.href)}
-              className="nav-link"
-            >
-              <span style={{ color: "#00d4ff", fontFamily: "'Fira Code', monospace" }}>./</span>
-              {link.label}
-            </button>
-          ))}
-        </div>
-
-        {/* Hire Me Button */}
-        <div className="hidden md:block">
-          <a href="mailto:ajaysingh1103as@gmail.com" className="neon-btn" style={{ padding: "8px 20px", fontSize: "0.85rem" }}>
-            Hire Me
-          </a>
-        </div>
-
-        {/* Mobile Hamburger */}
+    <header className="site-header">
+      <div className="nav-inner shell" data-dust="panel" data-dust-step="0">
+        <a className="nav-brand" href="#home" aria-label={personal.brand + " home"} onClick={() => setExpanded(false)}>
+          <Brand />
+        </a>
         <button
-          className="md:hidden flex flex-col gap-1.5 p-2"
-          onClick={() => setMenuOpen(!menuOpen)}
+          type="button"
+          className="nav-toggle"
+          ref={toggle}
+          aria-label={expanded ? "Close navigation" : "Open navigation"}
+          aria-expanded={expanded}
+          aria-controls="portfolio-nav"
+          onClick={() => setExpanded(!expanded)}
         >
-          <motion.span
-            animate={menuOpen ? { rotate: 45, y: 8 } : { rotate: 0, y: 0 }}
-            className="block w-6 h-0.5 bg-[#00d4ff] origin-center"
-          />
-          <motion.span
-            animate={menuOpen ? { opacity: 0 } : { opacity: 1 }}
-            className="block w-6 h-0.5 bg-[#00d4ff]"
-          />
-          <motion.span
-            animate={menuOpen ? { rotate: -45, y: -8 } : { rotate: 0, y: 0 }}
-            className="block w-6 h-0.5 bg-[#00d4ff] origin-center"
-          />
+          {expanded ? <LuX /> : <LuMenu />}
         </button>
+        <nav
+          className="nav-links"
+          id="portfolio-nav"
+          data-expanded={expanded}
+          aria-label="Portfolio"
+          onKeyDown={(event) => {
+            if (event.key === "Escape" && expanded) {
+              setExpanded(false);
+              toggle.current?.focus();
+            }
+          }}
+        >
+          {links.map(([label, hash]) => (
+            <a key={hash} href={hash} onClick={() => setExpanded(false)}>{label}</a>
+          ))}
+        </nav>
+        <a className="nav-resume" href={personal.resumePath} download="Ajay-Singh-Resume.pdf">Résumé</a>
       </div>
-
-      {/* Mobile Menu */}
-      <AnimatePresence>
-        {menuOpen && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="mobile-menu overflow-hidden md:hidden"
-          >
-            <div className="px-6 py-4 flex flex-col gap-4">
-              {navLinks.map((link) => (
-                <button
-                  key={link.href}
-                  onClick={() => handleNav(link.href)}
-                  className="text-left nav-link text-base"
-                  style={{ fontFamily: "'Fira Code', monospace" }}
-                >
-                  <span style={{ color: "#00d4ff" }}>./</span>{link.label}
-                </button>
-              ))}
-              <a href="mailto:ajaysingh1103as@gmail.com" className="neon-btn text-center mt-2">
-                Hire Me
-              </a>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.nav>
+      <motion.div className="scroll-progress" style={{ scaleX: scrollYProgress }} aria-hidden="true" />
+    </header>
   );
 }
