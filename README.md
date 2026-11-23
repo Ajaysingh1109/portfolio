@@ -26,4 +26,4 @@ Edit `src/data.ts` for profile details, the six skill groups, work experience, p
 
 ## Review and deploy on Vercel
 
-Use a feature branch preview for review. In the existing Vercel project, select the Vite preset, use `npm run build` and serve the `dist` directory. Promote the reviewed preview or merge the branch when ready to update production. If the domain changes, update the absolute Open Graph URLs in `index.html`. The contact form opens a prefilled draft in the visitor's email app.
+Automatic Vercel deployments from `main` and `codex/cinematic-snap-portfolio` are paused in `vercel.json`. Update that configuration when ready to deploy. In the existing Vercel project, select the Vite preset, use `npm run build` and serve the `dist` directory. If the domain changes, update the absolute Open Graph URLs in `index.html`. The contact form opens a prefilled draft in the visitor's email app.
