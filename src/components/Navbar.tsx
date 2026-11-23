@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { personal } from "../data";
 
 const navLinks = [
   { label: "About", href: "#about" },
@@ -46,7 +47,7 @@ export default function Navbar() {
         >
           <div className="w-9 h-9 rounded-lg flex items-center justify-center text-sm font-bold text-[#050510]"
             style={{ background: "linear-gradient(135deg, #00d4ff, #a855f7)" }}>
-            AS
+            {personal.initials}
           </div>
           <span className="font-bold text-white" style={{ fontFamily: "'Fira Code', monospace" }}>
             ajay<span style={{ color: "#00d4ff" }}>.ai</span>
@@ -69,7 +70,7 @@ export default function Navbar() {
 
         {/* Hire Me Button */}
         <div className="hidden md:block">
-          <a href="mailto:ajaysingh1103as@gmail.com" className="neon-btn" style={{ padding: "8px 20px", fontSize: "0.85rem" }}>
+          <a href={`mailto:${personal.email}`} className="neon-btn" style={{ padding: "8px 20px", fontSize: "0.85rem" }}>
             Hire Me
           </a>
         </div>
@@ -115,7 +116,7 @@ export default function Navbar() {
                   <span style={{ color: "#00d4ff" }}>./</span>{link.label}
                 </button>
               ))}
-              <a href="mailto:ajaysingh1103as@gmail.com" className="neon-btn text-center mt-2">
+              <a href={`mailto:${personal.email}`} className="neon-btn text-center mt-2">
                 Hire Me
               </a>
             </div>

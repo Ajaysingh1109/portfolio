@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { personal } from "../data";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -32,7 +33,7 @@ export default function Footer() {
                   "linear-gradient(135deg, #00d4ff, #a855f7)",
               }}
             >
-              AS
+              {personal.initials}
             </div>
 
             <span
@@ -41,8 +42,7 @@ export default function Footer() {
                 fontFamily: "'Fira Code', monospace",
               }}
             >
-              Ajay<span style={{ color: "#00d4ff" }}>.</span>
-              Singh
+              {personal.name}
             </span>
           </motion.button>
 
@@ -51,7 +51,7 @@ export default function Footer() {
             <p className="text-[#64748b] text-sm">
               Designed & Built by{" "}
               <span style={{ color: "#00d4ff" }}>
-                Ajay Singh
+                {personal.name}
               </span>
             </p>
 
@@ -61,8 +61,17 @@ export default function Footer() {
                 fontFamily: "'Fira Code', monospace",
               }}
             >
-              AI Engineer · Data Scientist · ML Engineer
+              {personal.headline}
             </p>
+
+            <a
+              href={personal.portfolioRepository}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block mt-2 text-sm text-[#94a3b8] hover:underline"
+            >
+              Portfolio Repository
+            </a>
 
             <p
               className="text-[#334155] text-xs mt-2"

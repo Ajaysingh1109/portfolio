@@ -1,128 +1,27 @@
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
+import { skillGroups } from "../data";
 
-const skillCategories = [
-  {
-    icon: "💻",
-    title: "Programming & Data",
-    color: "#00d4ff",
-    skills: [
-      "Python",
-      "SQL",
-      "Data Preprocessing",
-      "Feature Engineering",
-    ],
-  },
-  {
-    icon: "🧠",
-    title: "Machine Learning",
-    color: "#a855f7",
-    skills: [
-      "Supervised Learning",
-      "Classification",
-      "Regression",
-      "Predictive Modeling",
-      "Model Evaluation",
-      "Hyperparameter Tuning",
-    ],
-  },
-  {
-    icon: "🤖",
-    title: "AI & Generative AI",
-    color: "#00ff88",
-    skills: [
-      "Deep Learning",
-      "NLP",
-      "LLMs",
-      "RAG",
-      "LangChain",
-      "LangGraph",
-      "Computer Vision",
-    ],
-  },
-  {
-    icon: "📊",
-    title: "Data Science",
-    color: "#f59e0b",
-    skills: [
-      "Data Analysis",
-      "EDA",
-      "Statistical Analysis",
-      "Model Validation",
-      "Data Visualization",
-      "Power BI",
-      "Microsoft Excel",
-    ],
-  },
-  {
-    icon: "⚙️",
-    title: "Deployment & Engineering",
-    color: "#ec4899",
-    skills: [
-      "REST APIs",
-      "Model Deployment",
-      "Flask",
-      "Docker",
-      "Git",
-      "CI/CD Fundamentals",
-    ],
-  },
-  {
-    icon: "🗄️",
-    title: "Databases & Cloud",
-    color: "#38bdf8",
-    skills: [
-      "PostgreSQL",
-      "MongoDB",
-      "Vector Databases",
-      "ChromaDB",
-      "Pinecone",
-      "AWS",
-    ],
-  },
-];
-
-const techStack = [
-  "Python",
-  "SQL",
-  "Pandas",
-  "NumPy",
-  "Scikit-learn",
-  "XGBoost",
-  "TensorFlow",
-  "Keras",
-  "PyTorch",
-  "NLP",
-  "LLMs",
-  "RAG",
-  "LangChain",
-  "LangGraph",
-  "YOLO",
-  "OpenCV",
-  "Flask",
-  "REST APIs",
-  "Docker",
-  "Git",
-  "PostgreSQL",
-  "MongoDB",
-  "ChromaDB",
-  "Pinecone",
-  "AWS",
-  "Power BI",
-  "Microsoft Excel",
-];
+const groupStyles: Record<string, { icon: string; color: string }> = {
+  languages: { icon: "💻", color: "#00d4ff" },
+  ai: { icon: "🧠", color: "#a855f7" },
+  backend: { icon: "🗄️", color: "#38bdf8" },
+  frontend: { icon: "⚙️", color: "#ec4899" },
+};
 
 function SkillCard({
   category,
   index,
 }: {
-  category: (typeof skillCategories)[number];
+  category: (typeof skillGroups)[number];
   index: number;
 }) {
   const { ref, inView } = useInView({
     threshold: 0.15,
     triggerOnce: true,
   });
+
+  const { icon, color } = groupStyles[category.id] ?? groupStyles.languages;
 
   return (
     <motion.div
@@ -132,11 +31,11 @@ function SkillCard({
       transition={{ duration: 0.6, delay: index * 0.08 }}
       className="glass-card rounded-2xl p-6"
       style={{
-        border: `1px solid ${category.color}22`,
+        border: `1px solid ${color}22`,
       }}
     >
       <div className="flex items-center gap-3 mb-5">
-        <span className="text-2xl">{category.icon}</span>
+        <span className="text-2xl">{icon}</span>
 
         <h3 className="text-white font-bold text-lg">
           {category.title}
@@ -149,8 +48,8 @@ function SkillCard({
             key={skill}
             className="px-3 py-1.5 rounded-lg text-sm text-[#cbd5e1]"
             style={{
-              background: `${category.color}0d`,
-              border: `1px solid ${category.color}20`,
+              background: `${color}0d`,
+              border: `1px solid ${color}20`,
             }}
           >
             {skill}
@@ -204,66 +103,19 @@ export default function Skills() {
             Technical Skills
           </h2>
 
-          <p className="mt-4 text-[#94a3b8] max-w-2xl leading-relaxed">
-            A practical AI and Data Science skill set focused on
-            machine learning, generative AI, data analysis,
-            computer vision, NLP, and deployment.
-          </p>
         </motion.div>
 
         {/* Skill Categories */}
-        <div className="grid md:grid-cols-2 gap-6 mb-16">
-          {skillCategories.map((category, index) => (
+        <div className="grid md:grid-cols-2 gap-6">
+          {skillGroups.map((category, index) => (
             <SkillCard
-              key={category.title}
+              key={category.id}
               category={category}
               index={index}
             />
           ))}
         </div>
 
-        {/* Tech Stack */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7, delay: 0.4 }}
-        >
-          <p
-            className="text-center text-[#64748b] text-sm mb-6"
-            style={{
-              fontFamily: "'Fira Code', monospace",
-            }}
-          >
-            // technologies & tools
-          </p>
-
-          <div className="flex flex-wrap gap-2 justify-center">
-            {techStack.map((tech, index) => (
-              <motion.span
-                key={tech}
-                initial={{
-                  opacity: 0,
-                  scale: 0.8,
-                }}
-                animate={
-                  inView
-                    ? {
-                        opacity: 1,
-                        scale: 1,
-                      }
-                    : {}
-                }
-                transition={{
-                  duration: 0.3,
-                  delay: 0.5 + index * 0.025,
-                }}
-                className="tech-tag"
-              >
-                {tech}
-              </motion.span>
-            ))}
-          </div>
-        </motion.div>
       </div>
     </section>
   );

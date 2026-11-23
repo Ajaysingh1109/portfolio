@@ -4,12 +4,6 @@
    Global Reset
 ========================= */
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
 :root {
   --neon-blue: #00d4ff;
   --neon-purple: #a855f7;

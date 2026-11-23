@@ -1,34 +1,12 @@
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
+import { personal } from "../data";
 
 export default function About() {
   const { ref, inView } = useInView({
     threshold: 0.2,
     triggerOnce: true,
   });
-
-  const highlights = [
-    {
-      icon: "🧠",
-      title: "Machine Learning",
-      desc: "Supervised learning, predictive modeling, model evaluation and feature engineering.",
-    },
-    {
-      icon: "🤖",
-      title: "Generative AI",
-      desc: "LLMs, RAG, LangChain, LangGraph, vector search and AI agent workflows.",
-    },
-    {
-      icon: "👁️",
-      title: "Computer Vision",
-      desc: "Computer vision applications using YOLO and OpenCV for real-world scenarios.",
-    },
-    {
-      icon: "📊",
-      title: "Data Science",
-      desc: "Data analysis, EDA, statistical analysis, model validation and visualization.",
-    },
-  ];
 
   return (
     <section id="about" className="py-24 relative" ref={ref}>
@@ -55,7 +33,7 @@ export default function About() {
           </h2>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
+        <div className="max-w-3xl">
           {/* LEFT - About */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
@@ -77,7 +55,7 @@ export default function About() {
 
                 <div>
                   <h3 className="text-white font-bold text-lg">
-                    Ajay Singh
+                    {personal.name}
                   </h3>
 
                   <p
@@ -87,84 +65,17 @@ export default function About() {
                       fontSize: "0.8rem",
                     }}
                   >
-                    AI Engineer · Data Scientist
+                    {personal.headline}
                   </p>
                 </div>
               </div>
 
-              {/* Introduction */}
-              <p className="text-[#94a3b8] leading-relaxed mb-6 text-sm">
-                I'm an{" "}
-                <span style={{ color: "#00d4ff" }}>
-                  AI Engineer and Computer Science graduate
-                </span>{" "}
-                focused on building practical Machine Learning, Deep Learning,
-                NLP, Generative AI, and Computer Vision applications.
+              <p className="text-[#94a3b8] leading-relaxed text-base">
+                {personal.summary}
               </p>
-
-              <p className="text-[#94a3b8] leading-relaxed mb-6 text-sm">
-                My work spans{" "}
-                <span style={{ color: "#a855f7" }}>
-                  LLMs, Retrieval-Augmented Generation (RAG),
-                </span>{" "}
-                predictive modeling, data analysis, and AI application
-                development. I enjoy taking real-world problems and converting
-                them into structured, data-driven solutions.
-              </p>
-
-              <p className="text-[#94a3b8] leading-relaxed text-sm mb-6">
-                Currently, I'm working in{" "}
-                <span style={{ color: "#00ff88" }}>
-                  healthcare operations
-                </span>
-                , where I identified inefficiencies in manual,
-                Excel-based complaint logging and initiated development of a
-                speech-to-text AI application to structure patient feedback
-                into digital records.
-              </p>
-
-              {/* Tags */}
-              <div className="flex flex-wrap gap-2">
-                {[
-                  "Jabalpur, India",
-                  "AI / ML",
-                  "Generative AI",
-                  "Data Science",
-                  "Open to Opportunities",
-                ].map((tag) => (
-                  <span key={tag} className="tech-tag">
-                    {tag}
-                  </span>
-                ))}
-              </div>
             </div>
           </motion.div>
 
-          {/* RIGHT - Highlights */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {highlights.map((item, i) => (
-              <motion.div
-                key={item.title}
-                initial={{ opacity: 0, y: 30 }}
-                animate={inView ? { opacity: 1, y: 0 } : {}}
-                transition={{
-                  duration: 0.6,
-                  delay: 0.3 + i * 0.1,
-                }}
-                className="glass-card rounded-xl p-6 glow-border cursor-default"
-              >
-                <div className="text-3xl mb-3">{item.icon}</div>
-
-                <h4 className="text-white font-bold mb-2">
-                  {item.title}
-                </h4>
-
-                <p className="text-[#64748b] text-sm leading-relaxed">
-                  {item.desc}
-                </p>
-              </motion.div>
-            ))}
-          </div>
         </div>
       </div>
     </section>

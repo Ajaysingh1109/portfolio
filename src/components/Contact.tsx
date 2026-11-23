@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
+import { personal } from "../data";
 
 export default function Contact() {
   const { ref, inView } = useInView({
@@ -30,37 +31,37 @@ export default function Contact() {
     {
       icon: "📧",
       label: "Email",
-      value: "ajaysingh1103as@gmail.com",
-      href: "mailto:ajaysingh1103as@gmail.com",
+      value: personal.email,
+      href: `mailto:${personal.email}`,
       color: "#00d4ff",
-      copyValue: "ajaysingh1103as@gmail.com",
+      copyValue: personal.email,
     },
     {
       icon: "📱",
       label: "Phone",
-      value: "+91 7587939392",
-      href: "tel:+917587939392",
+      value: personal.phone,
+      href: `tel:${personal.phone.replace("-", "")}`,
       color: "#a855f7",
-      copyValue: "+91 7587939392",
+      copyValue: personal.phone,
     },
     {
       icon: "💼",
       label: "LinkedIn",
       value: "Connect on LinkedIn",
-      href: "https://www.linkedin.com/in/ajaysingh1103as",
+      href: personal.linkedin,
       color: "#00ff88",
     },
     {
       icon: "💻",
       label: "GitHub",
-      value: "Ajaysingh1109",
-      href: "https://github.com/Ajaysingh1109",
+      value: personal.githubHandle,
+      href: personal.github,
       color: "#38bdf8",
     },
     {
       icon: "📍",
       label: "Location",
-      value: "Jabalpur, India",
+      value: personal.location,
       href: "#",
       color: "#f59e0b",
     },
@@ -116,23 +117,22 @@ export default function Contact() {
           </h2>
 
           <p className="mt-4 text-[#94a3b8] max-w-2xl leading-relaxed">
-            Interested in AI, Machine Learning, Data Science, or
-            Generative AI opportunities? Feel free to reach out.
+            Reach me by email, phone, or LinkedIn.
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-12 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
           {/* CTA */}
           <motion.div
             initial={{
               opacity: 0,
-              x: -50,
+              y: 24,
             }}
             animate={
               inView
                 ? {
                     opacity: 1,
-                    x: 0,
+                    y: 0,
                   }
                 : {}
             }
@@ -153,27 +153,8 @@ export default function Contact() {
                 </span>
               </h3>
 
-              <p className="text-[#94a3b8] leading-relaxed mb-6">
-                I'm interested in opportunities where I can work
-                on practical AI and Data Science problems. Whether
-                it's Machine Learning, Generative AI, Computer
-                Vision, NLP, or AI-powered applications, I'd be
-                happy to connect.
-              </p>
-
-              <div className="space-y-2 text-sm text-[#64748b] mb-8">
-                {[
-                  "✅ Open to AI / ML Opportunities",
-                  "✅ Open to Data Science Roles",
-                  "✅ Interested in AI Projects & Collaboration",
-                  "✅ Open to Remote Opportunities",
-                ].map((item) => (
-                  <p key={item}>{item}</p>
-                ))}
-              </div>
-
               <a
-                href="mailto:ajaysingh1103as@gmail.com"
+                href={`mailto:${personal.email}`}
                 className="neon-btn block text-center"
                 style={{
                   width: "100%",
@@ -195,13 +176,13 @@ export default function Contact() {
                   key={item.label}
                   initial={{
                     opacity: 0,
-                    x: 50,
+                    y: 24,
                   }}
                   animate={
                     inView
                       ? {
                           opacity: 1,
-                          x: 0,
+                          y: 0,
                         }
                       : {}
                   }

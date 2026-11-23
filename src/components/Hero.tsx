@@ -1,46 +1,7 @@
-import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-
-const roles = [
-  "AI Engineer",
-  "Data Scientist",
-  "Machine Learning Engineer",
-  "Generative AI Developer",
-];
+import { personal } from "../data";
 
 export default function Hero() {
-  const [roleIndex, setRoleIndex] = useState(0);
-  const [displayText, setDisplayText] = useState("");
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [charIndex, setCharIndex] = useState(0);
-
-  useEffect(() => {
-    const currentRole = roles[roleIndex];
-    let timeout: ReturnType<typeof setTimeout>;
-
-    if (!isDeleting && charIndex < currentRole.length) {
-      timeout = setTimeout(() => setCharIndex((c) => c + 1), 80);
-    } else if (!isDeleting && charIndex === currentRole.length) {
-      timeout = setTimeout(() => setIsDeleting(true), 1800);
-    } else if (isDeleting && charIndex > 0) {
-      timeout = setTimeout(() => setCharIndex((c) => c - 1), 45);
-    } else if (isDeleting && charIndex === 0) {
-      setIsDeleting(false);
-      setRoleIndex((r) => (r + 1) % roles.length);
-    }
-
-    setDisplayText(currentRole.slice(0, charIndex));
-
-    return () => clearTimeout(timeout);
-  }, [charIndex, isDeleting, roleIndex]);
-
-  const stats = [
-    { value: "B.Tech", label: "Computer Science" },
-    { value: "GenAI", label: "LLMs & RAG" },
-    { value: "ML/DL", label: "AI Systems" },
-    { value: "CV + NLP", label: "AI Applications" },
-  ];
-
   return (
     <section
       id="home"
@@ -73,7 +34,7 @@ export default function Hero() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            {/* Availability */}
+            {/* Location */}
             <div
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs mb-6"
               style={{
@@ -91,52 +52,36 @@ export default function Hero() {
                 }}
               />
 
-              Available for Opportunities
+              {personal.location}
             </div>
 
             {/* Heading */}
             <h1 className="text-5xl md:text-7xl font-black mb-4 leading-tight">
               <span className="text-white">Hi, I'm </span>
               <br />
-              <span className="gradient-text">Ajay Singh</span>
+              <span className="gradient-text">{personal.name}</span>
             </h1>
 
-            {/* Dynamic Role */}
-            <div className="flex items-center gap-3 text-xl md:text-3xl font-semibold mb-6 min-h-10">
-              <span style={{ color: "#94a3b8" }}>I'm an</span>
+            <p className="text-xl md:text-2xl font-semibold mb-6 text-[#00d4ff]">
+              {personal.headline}
+            </p>
 
-              <span
-                style={{
-                  color: "#00d4ff",
-                  fontFamily: "'Fira Code', monospace",
-                }}
-              >
-                {displayText}
-                <span className="typing-cursor" />
-              </span>
-            </div>
-
-            {/* Professional Description */}
             <p className="text-[#94a3b8] text-base md:text-lg leading-relaxed max-w-xl mb-8">
-              AI Engineer and Computer Science graduate building{" "}
-              <span style={{ color: "#00d4ff" }}>
-                Machine Learning, Deep Learning and Generative AI
-              </span>{" "}
-              applications with a focus on{" "}
-              <span style={{ color: "#a855f7" }}>
-                LLMs, RAG, NLP and Computer Vision
-              </span>
-              .
+              {personal.summary}
             </p>
 
             {/* Buttons */}
             <div className="flex flex-wrap gap-4 mb-10">
               {/* Contact */}
               <a
-                href="mailto:ajaysingh1103as@gmail.com"
+                href={`mailto:${personal.email}`}
                 className="neon-btn"
               >
                 📧 Contact Me
+              </a>
+
+              <a href={personal.resumePath} className="neon-btn" download>
+                Download Resume
               </a>
 
               {/* Projects */}
@@ -180,22 +125,22 @@ export default function Hero() {
                 {
                   icon: "💼",
                   label: "LinkedIn",
-                  href: "https://www.linkedin.com/in/ajaysingh1103as",
+                  href: personal.linkedin,
                 },
                 {
                   icon: "🐙",
                   label: "GitHub",
-                  href: "https://github.com/Ajaysingh1109",
+                  href: personal.github,
                 },
                 {
                   icon: "📧",
                   label: "Email",
-                  href: "mailto:ajaysingh1103as@gmail.com",
+                  href: `mailto:${personal.email}`,
                 },
                 {
                   icon: "📱",
                   label: "Call Me",
-                  href: "tel:+917587939392",
+                  href: `tel:${personal.phone.replace("-", "")}`,
                 },
               ].map((item) => (
                 <a
@@ -252,8 +197,8 @@ export default function Hero() {
               }}
             >
               <img
-                src="/profile.jpg"
-                alt="Ajay Singh - AI Engineer and Data Scientist"
+                src={personal.portraitPath}
+                alt={personal.name}
                 className="w-full h-full object-cover"
               />
             </div>
@@ -296,35 +241,6 @@ export default function Hero() {
             </motion.div>
           </div>
 
-          {/* Stats */}
-          <div className="grid grid-cols-2 gap-4 w-full max-w-sm">
-            {stats.map((stat, i) => (
-              <motion.div
-                key={stat.label}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{
-                  duration: 0.5,
-                  delay: 0.6 + i * 0.1,
-                }}
-                className="stat-card"
-              >
-                <div
-                  className="text-xl md:text-2xl font-black"
-                  style={{
-                    color: "#00d4ff",
-                    fontFamily: "'Fira Code', monospace",
-                  }}
-                >
-                  {stat.value}
-                </div>
-
-                <div className="text-xs text-[#64748b] mt-1">
-                  {stat.label}
-                </div>
-              </motion.div>
-            ))}
-          </div>
         </motion.div>
       </div>
 
